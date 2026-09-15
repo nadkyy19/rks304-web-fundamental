@@ -1,0 +1,515 @@
+/* =========================================================
+   style.css — Profil Pribadi (gaya "profile card")
+   Versi CSS-only: tab & "lihat selengkapnya" tanpa JavaScript.
+   ========================================================= */
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #EEF1F0;
+  --surface: #FFFFFF;
+  --ink: #1B2421;
+  --ink-soft: #5B6663;
+  --ink-faint: #8A928F;
+  --accent: #2F6E5E;
+  --accent-dark: #234F44;
+  --accent-soft: #DCEAE5;
+  --warn: #B9791F;
+  --border: #E1E4E2;
+  --radius: 8px;
+  --shadow: 0 1px 2px rgba(27, 36, 33, 0.06), 0 2px 8px rgba(27, 36, 33, 0.04);
+
+  --font-body: -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  line-height: 1.55;
+}
+
+a { color: inherit; text-decoration: none; }
+img { max-width: 100%; display: block; }
+ul { list-style: none; }
+button { font-family: inherit; cursor: pointer; }
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.page-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 1.25rem;
+}
+
+/* ---------- Navbar ---------- */
+
+.navbar {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 30;
+}
+
+.navbar-inner {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0.85rem 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.nav-brand {
+  font-weight: 700;
+  font-size: 1.15rem;
+  color: var(--accent-dark);
+}
+
+.nav-links {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.nav-links a {
+  color: var(--ink-soft);
+  font-weight: 500;
+  font-size: 0.95rem;
+  padding: 0.35rem 0.15rem;
+  border-bottom: 2px solid transparent;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.nav-links a:hover { color: var(--ink); }
+
+.nav-links a[aria-current="page"] {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+/* ---------- Profile Card (cover + avatar overlap) ---------- */
+
+.profile-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  margin-top: 1.5rem;
+}
+
+.cover-photo {
+  height: 160px;
+  background: linear-gradient(120deg, var(--accent) 0%, var(--accent-dark) 100%);
+  position: relative;
+}
+
+.profile-header {
+  padding: 0 1.75rem 1.5rem;
+  position: relative;
+}
+
+.avatar {
+  width: 128px;
+  height: 128px;
+  border-radius: 50%;
+  border: 4px solid var(--surface);
+  background: var(--surface);
+  position: relative;
+  top: -56px;
+  margin-bottom: -40px;
+  overflow: hidden;
+}
+
+.avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+.profile-meta h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.profile-meta .headline {
+  color: var(--ink-soft);
+  font-size: 1rem;
+  margin-top: 0.2rem;
+}
+
+.profile-meta .location {
+  color: var(--ink-faint);
+  font-size: 0.88rem;
+  margin-top: 0.35rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.profile-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1.1rem;
+  flex-wrap: wrap;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+  padding: 0.55rem 1.2rem;
+  border-radius: 999px;
+  border: 1.5px solid var(--accent);
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: #fff;
+}
+.btn-primary:hover { background: var(--accent-dark); border-color: var(--accent-dark); }
+
+.btn-outline {
+  background: transparent;
+  color: var(--accent);
+}
+.btn-outline:hover { background: var(--accent-soft); }
+
+/* ---------- Tabs (CSS-only, via hidden radio buttons) ----------
+   Struktur HTML yang WAJIB seperti ini supaya selector di bawah bekerja:
+   <div class="tabs-css">
+     <input type="radio" id="tab-about-radio" class="tab-radio" checked>
+     <input type="radio" id="tab-experience-radio" class="tab-radio">
+     <input type="radio" id="tab-skills-radio" class="tab-radio">
+     <div class="tabs"> <label for="tab-about-radio" class="tab-btn">...</label> ... </div>
+     <div class="tab-panel" id="tab-about">...</div>
+     <div class="tab-panel" id="tab-experience">...</div>
+     <div class="tab-panel" id="tab-skills">...</div>
+   </div>
+   Radio, .tabs, dan setiap .tab-panel harus jadi SAUDARA (sibling)
+   langsung di dalam .tabs-css — tidak boleh ada pembungkus tambahan
+   di antara mereka, karena selector "~" hanya membaca saudara sejajar.
+------------------------------------------------------------------ */
+
+.tab-radio {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.tabs {
+  display: flex;
+  gap: 0.25rem;
+  border-bottom: 1px solid var(--border);
+  padding: 0 1.75rem;
+  overflow-x: auto;
+}
+
+.tab-btn {
+  display: inline-block;
+  padding: 0.9rem 1rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--ink-faint);
+  border-bottom: 3px solid transparent;
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.tab-btn:hover { color: var(--ink); }
+
+.tab-panel { display: none; padding: 1.75rem; }
+
+#tab-about-radio:checked ~ #tab-about,
+#tab-experience-radio:checked ~ #tab-experience,
+#tab-skills-radio:checked ~ #tab-skills {
+  display: block;
+}
+
+#tab-about-radio:checked ~ .tabs label[for="tab-about-radio"],
+#tab-experience-radio:checked ~ .tabs label[for="tab-experience-radio"],
+#tab-skills-radio:checked ~ .tabs label[for="tab-skills-radio"] {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+/* ---------- About / bio expand (CSS-only, via hidden checkbox) ---------- */
+
+.see-more-toggle {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.about-text {
+  color: var(--ink-soft);
+  max-width: 62ch;
+}
+
+.about-text.collapsed {
+  max-height: 4.8em;
+  overflow: hidden;
+}
+
+.see-more-toggle:checked ~ .about-text.collapsed {
+  max-height: none;
+  overflow: visible;
+}
+
+.see-more-btn {
+  display: inline-block;
+  cursor: pointer;
+  color: var(--accent);
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+  user-select: none;
+}
+
+.see-more-btn:hover { text-decoration: underline; }
+.see-more-btn::after { content: "Lihat selengkapnya"; }
+.see-more-toggle:checked ~ .see-more-btn::after { content: "Lihat lebih sedikit"; }
+
+/* ---------- Skill badges ---------- */
+
+.skill-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 0.5rem;
+}
+
+.skill-badge {
+  background: var(--accent-soft);
+  color: var(--accent-dark);
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 0.4rem 0.85rem;
+  border-radius: 999px;
+}
+
+.skill-group { margin-bottom: 1.5rem; }
+.skill-group:last-child { margin-bottom: 0; }
+.skill-group h3 { font-size: 0.95rem; color: var(--ink-soft); margin-bottom: 0.5rem; }
+
+/* ---------- Experience list ---------- */
+
+.exp-item {
+  display: flex;
+  gap: 1rem;
+  padding: 1.1rem 0;
+  border-bottom: 1px solid var(--border);
+}
+.exp-item:last-child { border-bottom: none; }
+
+.exp-logo {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius);
+  background: var(--accent-soft);
+  color: var(--accent-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.exp-item h3 { font-size: 1rem; }
+.exp-item .org { color: var(--ink-soft); font-size: 0.92rem; }
+.exp-item .period { color: var(--ink-faint); font-size: 0.82rem; margin: 0.15rem 0 0.4rem; }
+.exp-item p { color: var(--ink-soft); font-size: 0.92rem; }
+
+/* ---------- Section block (portfolio / contact wrapper) ---------- */
+
+.section-block {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1.75rem;
+  margin-top: 1.5rem;
+}
+
+.section-block h2 { font-size: 1.2rem; margin-bottom: 1.25rem; }
+
+/* ---------- Portfolio grid ---------- */
+
+.project-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.25rem;
+}
+
+.project-card {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  transition: box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+.project-card:hover {
+  box-shadow: var(--shadow);
+  border-color: var(--accent);
+}
+
+.project-card .kind {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--warn);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  margin-bottom: 0.4rem;
+}
+
+.project-card h3 { font-size: 1.05rem; margin-bottom: 0.3rem; }
+.project-card p { color: var(--ink-soft); font-size: 0.9rem; flex-grow: 1; margin-bottom: 0.8rem; }
+
+.tech-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 0.9rem;
+}
+
+.tech-badges li {
+  font-size: 0.75rem;
+  background: var(--bg);
+  color: var(--ink-soft);
+  padding: 0.25rem 0.55rem;
+  border-radius: 999px;
+}
+
+.project-links {
+  display: flex;
+  gap: 1rem;
+  border-top: 1px solid var(--border);
+  padding-top: 0.75rem;
+}
+
+.project-links a {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--accent);
+}
+.project-links a:hover { text-decoration: underline; }
+
+/* ---------- Contact form ---------- */
+
+.contact-layout {
+  display: grid;
+  grid-template-columns: 0.9fr 1.3fr;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.contact-detail-list {
+  margin-top: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.contact-detail-list li {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 0.9rem;
+  border-bottom: 1px solid var(--border);
+}
+.contact-detail-list li:last-child { border-bottom: none; padding-bottom: 0; }
+
+.contact-detail-list .label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--warn);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.contact-detail-list .value { font-size: 0.95rem; margin-top: 0.15rem; }
+
+form.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.field { display: flex; flex-direction: column; gap: 0.4rem; }
+.field label { font-weight: 600; font-size: 0.9rem; }
+.field .hint { font-weight: 400; font-size: 0.78rem; color: var(--ink-faint); }
+
+.field input,
+.field select,
+.field textarea {
+  font-family: inherit;
+  font-size: 0.95rem;
+  padding: 0.65rem 0.8rem;
+  border: 1.5px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg);
+  color: var(--ink);
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus { border-color: var(--accent); }
+
+.field textarea { resize: vertical; min-height: 130px; }
+
+fieldset { border: 1.5px solid var(--border); border-radius: 6px; padding: 0.9rem 1rem; }
+fieldset legend { font-weight: 600; font-size: 0.9rem; padding: 0 0.4rem; }
+
+.radio-options { display: flex; flex-wrap: wrap; gap: 1.1rem; margin-top: 0.3rem; }
+.radio-options label { display: flex; align-items: center; gap: 0.4rem; font-weight: 400; font-size: 0.9rem; }
+
+.form-status {
+  font-size: 0.9rem;
+  color: var(--accent-dark);
+  background: var(--accent-soft);
+  padding: 0.8rem 1rem;
+  border-radius: 6px;
+  display: none;
+}
+.form-status.visible { display: block; }
+
+/* ---------- Footer ---------- */
+
+.page-footer {
+  margin: 2.5rem 0 3rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--border);
+  font-size: 0.82rem;
+  color: var(--ink-faint);
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.page-footer a { color: var(--ink-faint); }
+.page-footer a:hover { color: var(--accent); }
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 720px) {
+  .profile-actions { flex-direction: column; align-items: stretch; }
+  .contact-layout { grid-template-columns: 1fr; }
+  .avatar { width: 96px; height: 96px; top: -40px; margin-bottom: -28px; }
+  .cover-photo { height: 120px; }
+  .tabs { padding: 0 1rem; }
+  .tab-panel { padding: 1.25rem; }
+}

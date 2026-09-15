@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact — Nama Kamu</title>
+  <meta name="description" content="Hubungi saya untuk konsultasi, kolaborasi, atau pertanyaan umum.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="index.html" class="nav-brand">Nama Kamu</a>
+      <nav aria-label="Navigasi utama">
+        <ul class="nav-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="portfolio.html">Portfolio</a></li>
+          <li><a href="contact.html" aria-current="page">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="page-container">
+
+    <section class="section-block">
+      <h2>Kontak & Kolaborasi</h2>
+
+      <div class="contact-layout">
+        <div class="contact-intro">
+          <p>
+            Terbuka untuk konsultasi, ajakan kolaborasi proyek, maupun pertanyaan umum
+            seputar web development. Isi formulir dan saya akan membalas secepatnya.
+          </p>
+          <ul class="contact-detail-list">
+            <li><span class="label">Email</span><span class="value">nama@contoh.com</span></li>
+            <li><span class="label">Domisili</span><span class="value">Kota, Provinsi</span></li>
+            <li><span class="label">Respon</span><span class="value">1–2 hari kerja</span></li>
+          </ul>
+        </div>
+
+        <form class="contact-form" id="contactForm" novalidate>
+          <div class="field">
+            <label for="fullname">Nama Lengkap</label>
+            <input type="text" id="fullname" name="fullname" required autocomplete="name" placeholder="Nama sesuai identitas">
+          </div>
+
+          <div class="field">
+            <label for="email">Alamat Email</label>
+            <input type="email" id="email" name="email" required autocomplete="email" placeholder="nama@contoh.com">
+          </div>
+
+          <div class="field">
+            <label for="category">Kategori / Keperluan</label>
+            <select id="category" name="category" required>
+              <option value="" disabled selected>Pilih salah satu</option>
+              <option value="konsultasi">Konsultasi</option>
+              <option value="kolaborasi">Kolaborasi Proyek</option>
+              <option value="pertanyaan">Pertanyaan Umum</option>
+              <option value="lainnya">Lainnya</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <fieldset>
+              <legend>Preferensi Balasan</legend>
+              <div class="radio-options">
+                <label><input type="radio" name="preference" value="email" checked> Email</label>
+                <label><input type="radio" name="preference" value="telepon"> Telepon</label>
+                <label><input type="radio" name="preference" value="keduanya"> Keduanya</label>
+              </div>
+            </fieldset>
+          </div>
+
+          <div class="field">
+            <label for="message">Pesan</label>
+            <textarea id="message" name="message" required placeholder="Ceritakan kebutuhan atau pertanyaan Anda..."></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-primary" style="align-self: flex-start;">Kirim Pesan</button>
+          <p class="form-status" id="formStatus" role="status" aria-live="polite">
+            Terima kasih! Pesan Anda telah tercatat (simulasi — belum terhubung ke server).
+          </p>
+        </form>
+      </div>
+    </section>
+
+    <footer class="page-footer">
+      <p>&copy; 2026 Nama Kamu. Tugas RKS304 — Web Fundamental.</p>
+      <a href="https://github.com/" target="_blank" rel="noopener noreferrer">GitHub</a>
+    </footer>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
