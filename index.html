@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nineteen Studios Admin</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script>
+  tailwind.config = { theme: { extend: { fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] } } } }
+</script>
+</head>
+<body class="bg-white text-slate-800 font-sans antialiased min-h-screen flex items-center justify-center px-4">
+
+  <div class="w-full max-w-sm">
+    <div class="flex justify-center mb-8">
+      <img src="assets/logo.png" alt="Nineteen Studios" class="h-9">
+    </div>
+
+    <div class="border border-slate-100 rounded-2xl p-8 shadow-sm shadow-slate-100">
+      <h1 class="text-lg font-semibold text-slate-800 mb-1">Masuk ke Admin</h1>
+
+      <form id="loginForm" novalidate class="space-y-4">
+        <p id="login-error" class="hidden rounded-lg bg-rose-50 text-rose-500 text-xs px-3.5 py-2.5"></p>
+        <div>
+          <label class="block text-xs font-medium text-slate-500 mb-1.5" for="username">Username</label>
+          <input id="username" type="text" placeholder="Masukkan username"
+            class="w-full rounded-lg border border-slate-200 px-3.5 py-2.5 text-sm text-slate-700 placeholder-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400">
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-slate-500 mb-1.5" for="password">Password</label>
+          <input id="password" type="password" placeholder="Masukkan password"
+            class="w-full rounded-lg border border-slate-200 px-3.5 py-2.5 text-sm text-slate-700 placeholder-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-400">
+        </div>
+        <button type="submit"
+          class="w-full rounded-lg bg-gradient-to-r from-sky-400 to-blue-600 text-white text-sm font-medium py-2.5 hover:opacity-90 transition">
+          Login
+        </button>
+      </form>
+    </div>
+
+    <p class="text-center text-xs text-slate-400 mt-5">
+      Belum punya akun? <a href="register.html" class="text-blue-600 font-medium hover:underline">Daftar</a>
+    </p>
+
+    <p class="text-center text-xs text-slate-300 mt-6">© 2026 Nineteen Studios</p>
+  </div>
+
+<script>
+  // Akun default + akun hasil register (disimpan di localStorage)
+  var DEFAULT_USER = { username: 'admin', password: 'admin12345' };
+
+  function getUsers() {
+    try { return JSON.parse(localStorage.getItem('users')) || []; }
+    catch (e) { return []; }
+  }
+
+  document.getElementById('loginForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var username = document.getElementById('username').value.trim();
+    var password = document.getElementById('password').value;
+    var error = document.getElementById('login-error');
+
+    var users = getUsers().concat([DEFAULT_USER]);
+    var match = users.find(function (u) {
+      return u.username === username && u.password === password;
+    });
+
+    if (username === '' || password === '') {
+      error.textContent = 'Username dan password tidak boleh kosong.';
+      error.classList.remove('hidden');
+    } else if (!match) {
+      error.textContent = 'Username atau password salah.';
+      error.classList.remove('hidden');
+    } else {
+      sessionStorage.setItem('loggedInUser', match.username);
+      window.location.href = 'dashboard.html';
+    }
+  });
+</script>
+</body>
+</html>
